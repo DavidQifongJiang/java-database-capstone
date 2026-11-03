@@ -1,7 +1,7 @@
 package com.project.back_end.controllers;
 import com.project.back_end.models.*;
 import com.project.back_end.services.*;
-import com.project.back_end.DTO.Login;
+import com.project.back_end.DTO.AppointmentDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;
 import jakarta.validation.Valid;
@@ -13,7 +13,7 @@ public class AppointmentController {
     private final AppointmentService appointments;private final TokenService tokens;
     public AppointmentController(AppointmentService appointments,TokenService tokens) {this.appointments=appointments;this.tokens=tokens;}
     @GetMapping public ResponseEntity<Map<String,Object>> getAppointments(@RequestParam LocalDate date,@RequestParam(defaultValue="") String patientName,@RequestHeader(value="Authorization",required=false) String token) {
-        return ResponseEntity.ok(Map.of("appointments",appointments.getAppointments(tokens.require(token,"doctor").id(),date,patientName)));
+        return ResponseEntity.ok(Map.of("appointments",appointments.getAppointments(tokens.require(token,"doctor").id(),date,patientName).stream().map(AppointmentDTO::from).toList()));
     }
     @PostMapping public ResponseEntity<Map<String,Object>> bookAppointment(@Valid @RequestBody Appointment appointment,@RequestHeader(value="Authorization",required=false) String token) {
         return ResponseEntity.status(201).body(Map.of("appointment",appointments.bookAppointment(appointment,tokens.require(token,"patient").id()),"message","Appointment booked"));

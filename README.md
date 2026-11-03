@@ -31,10 +31,10 @@ The empty database receives three doctors, five patients and five appointments f
 - Doctor calendar, profile, unavailable dates, completion and MongoDB prescriptions.
 - BCrypt hashes; signed expiring JWTs; role and ownership checks; validated bodies; database locks and unique slots prevent double booking. Passwords are write-only JSON fields.
 - Controllers, services, repositories and models: `app/src/main/java/com/project/back_end`.
-- Active frontend: `static/index.html`, `static/clinic.js`, `static/clinic.css`, role dashboards under `templates/`.
+- Active frontend: `static/index.html`, `static/clinic.js`, `static/clinic.css`, page-specific styles under `static/assets/css/`, reusable header/card scripts under `static/js/components/`, role dashboards under `templates/`.
 - [Architecture](schema-architecture.md), [schema](schema-design.md), [user stories](user_stories.md).
 
-REST requests use Bearer headers. A matching HttpOnly SameSite cookie protects MVC dashboard navigation. Sign-out clears browser token storage and the cookie; existing JWTs remain valid until expiry. This demonstration uses local HTTP, Hibernate schema updates and standalone MongoDB. A production system would require TLS, migrations, managed secrets, database authentication, revocation, audit controls and clinical/privacy review.
+The course frontend keeps `userRole` and `token` in localStorage; these are presentation state, never authorization proof. REST requests use Bearer headers. A matching HttpOnly SameSite cookie protects MVC dashboard navigation. Sign-out clears browser token storage and the cookie; existing JWTs remain valid until expiry. This demonstration uses local HTTP, Hibernate schema updates and standalone MongoDB. A production system would require TLS, migrations, managed secrets, database authentication, revocation, audit controls and clinical/privacy review.
 
 ## Validation
 
@@ -46,7 +46,7 @@ docker compose build clinic
 python scripts/smoke_test.py
 ```
 
-On 2026-11-03, all 10 Maven tests passed during `docker compose up -d --build`. Live HTTP smoke checks passed against MySQL and MongoDB: all roles, missing/tampered/wrong-role tokens, password exclusion, doctor filtering, patient ownership, prescription persistence and simultaneous booking. The smoke test creates a clearly fictional prescription and creates/cancels a test appointment. GitHub Actions repeats Maven verification and image building on push and pull request.
+On 2026-11-03, all 12 Maven tests passed during `docker compose up -d --build`. Live HTTP smoke checks passed against MySQL and MongoDB: all roles, missing/tampered/wrong-role tokens, password exclusion, doctor filtering, patient ownership, prescription persistence and simultaneous booking. DTO display fields and the parameterized case-insensitive doctor query also have focused tests. The smoke test creates a clearly fictional prescription and creates/cancels a test appointment. GitHub Actions repeats Maven verification and image building on push and pull request.
 
 `scripts/capture_evidence.py` saves SQL and curl output without printing login tokens or database secrets. Dates derive from actual seeded appointments.
 
