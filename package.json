@@ -1,0 +1,16 @@
+{
+  "name": "smart-clinic-quality-checks",
+  "private": true,
+  "scripts": {
+    "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
+    "lint:html": "htmlhint \"app/src/main/resources/static/index.html\" \"app/src/main/resources/templates/**/*.html\"",
+    "lint:css": "stylelint \"app/src/main/resources/static/clinic.css\" \"app/src/main/resources/static/assets/css/*.css\"",
+    "lint:js": "eslint app/src/main/resources/static/clinic.js app/src/main/resources/static/js/components/header.js app/src/main/resources/static/js/components/doctorCard.js"
+  },
+  "devDependencies": {
+    "eslint": "10.14.0",
+    "globals": "16.5.0",
+    "htmlhint": "1.9.2",
+    "stylelint": "16.26.1"
+  }
+}

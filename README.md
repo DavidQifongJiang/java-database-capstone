@@ -38,6 +38,21 @@ The course frontend keeps `userRole` and `token` in localStorage; these are pres
 
 ## Validation
 
+The four course workflows run on every push and pull request:
+
+- `lint-frontend.yml`: HTMLHint, Stylelint and ESLint check the active HTML/CSS/JavaScript.
+- `lint-backend.yml`: Checkstyle catches Java whitespace, naming and empty-statement violations.
+- `compile-backend.yml`: Maven compiles, tests and packages the backend.
+- `lint-docker.yml`: Hadolint checks Dockerfile syntax and best practices.
+
+The existing `ci.yml` additionally builds the container. Frontend tools are development-only dependencies; install Node.js 22 or later to run them locally:
+
+```sh
+npm ci --ignore-scripts
+npm run lint
+mvn -B -ntp -f app/pom.xml org.apache.maven.plugins:maven-checkstyle-plugin:3.6.0:check -Dcheckstyle.config.location=../checkstyle.xml
+```
+
 ```sh
 mvn -B -f app/pom.xml verify
 # Or build/test with containerized Maven:

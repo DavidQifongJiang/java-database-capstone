@@ -131,3 +131,5 @@ dmypy.json
 .env
 app/target/
 __pycache__/
+node_modules/
+.eslintcache
