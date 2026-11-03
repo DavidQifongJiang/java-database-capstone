@@ -2,7 +2,9 @@
 
 17 stories: five administrator, six patient and six doctor.
 
-## As a admin, I want to sign in securely
+## Admin User Stories
+
+### As a admin, I want to sign in securely
 
 As a admin, I want to sign in securely, so that I can manage clinic operations.
 
@@ -17,8 +19,7 @@ Story points: 3
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a admin, I want to sign out
+### As a admin, I want to sign out
 
 As a admin, I want to sign out, so that I can end my browser session.
 
@@ -33,8 +34,7 @@ Story points: 2
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a admin, I want to add a doctor
+### As a admin, I want to add a doctor
 
 As a admin, I want to add a doctor, so that I can expand the searchable care team.
 
@@ -49,8 +49,7 @@ Story points: 5
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a admin, I want to remove a doctor profile
+### As a admin, I want to remove a doctor profile
 
 As a admin, I want to remove a doctor profile, so that I can keep the directory current.
 
@@ -65,8 +64,7 @@ Story points: 3
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a admin, I want to query monthly appointment statistics in MySQL
+### As a admin, I want to query monthly appointment statistics in MySQL
 
 As a admin, I want to query monthly appointment statistics in MySQL, so that I can review clinic activity.
 
@@ -81,8 +79,9 @@ Story points: 3
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
+## Patient User Stories
 
-## As a patient, I want to view available doctors without signing in
+### As a patient, I want to view available doctors without signing in
 
 As a patient, I want to view available doctors without signing in, so that I can choose a care provider.
 
@@ -97,8 +96,7 @@ Story points: 3
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a patient, I want to register an account
+### As a patient, I want to register an account
 
 As a patient, I want to register an account, so that I can manage my appointments.
 
@@ -113,8 +111,7 @@ Story points: 3
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a patient, I want to sign in
+### As a patient, I want to sign in
 
 As a patient, I want to sign in, so that I can access my private appointments.
 
@@ -129,8 +126,7 @@ Story points: 3
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a patient, I want to sign out
+### As a patient, I want to sign out
 
 As a patient, I want to sign out, so that I can end access from my browser.
 
@@ -145,8 +141,7 @@ Story points: 2
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a patient, I want to book a one-hour appointment
+### As a patient, I want to book a one-hour appointment
 
 As a patient, I want to book a one-hour appointment, so that I can reserve a convenient available slot.
 
@@ -161,8 +156,7 @@ Story points: 5
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a patient, I want to view my upcoming appointments
+### As a patient, I want to view my upcoming appointments
 
 As a patient, I want to view my upcoming appointments, so that I can track my schedule and records.
 
@@ -177,8 +171,9 @@ Story points: 5
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
+## Doctor User Stories
 
-## As a doctor, I want to sign in
+### As a doctor, I want to sign in
 
 As a doctor, I want to sign in, so that I can access my own clinical workspace.
 
@@ -193,8 +188,7 @@ Story points: 3
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a doctor, I want to sign out
+### As a doctor, I want to sign out
 
 As a doctor, I want to sign out, so that I can end my browser session.
 
@@ -209,8 +203,7 @@ Story points: 2
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a doctor, I want to view my appointment calendar
+### As a doctor, I want to view my appointment calendar
 
 As a doctor, I want to view my appointment calendar, so that I can prepare for scheduled visits.
 
@@ -225,8 +218,7 @@ Story points: 5
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a doctor, I want to mark a date unavailable
+### As a doctor, I want to mark a date unavailable
 
 As a doctor, I want to mark a date unavailable, so that I can prevent new appointments during time off.
 
@@ -241,8 +233,7 @@ Story points: 3
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a doctor, I want to update my profile and availability
+### As a doctor, I want to update my profile and availability
 
 As a doctor, I want to update my profile and availability, so that I can keep my directory information accurate.
 
@@ -257,8 +248,7 @@ Story points: 5
 
 Notes: IBM Smart Clinic capstone. Use fictional demonstration data only. Implementation and validation are in this repository.
 
-
-## As a doctor, I want to view patient details for assigned appointments and add records
+### As a doctor, I want to view patient details for assigned appointments and add records
 
 As a doctor, I want to view patient details for assigned appointments and add records, so that I can maintain visit context.
 
