@@ -1,0 +1,12 @@
+mysql> SHOW TABLES;
+
++--------------------------+
+| Tables_in_cms            |
++--------------------------+
+| admin                    |
+| appointment              |
+| doctor                   |
+| doctor_available_times   |
+| doctor_unavailable_dates |
+| patient                  |
++--------------------------+

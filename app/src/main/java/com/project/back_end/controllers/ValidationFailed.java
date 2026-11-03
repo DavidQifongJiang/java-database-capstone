@@ -1,28 +1,23 @@
 package com.project.back_end.controllers;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.project.back_end.models.*;
+import com.project.back_end.services.*;
+import com.project.back_end.DTO.Login;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+import jakarta.validation.Valid;
+import java.util.*;
+import java.time.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.validation.FieldError;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 @RestControllerAdvice
 public class ValidationFailed {
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        
-        // Iterate through all the validation errors
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            String errorMessage = error.getDefaultMessage();
-            errors.put("message", "" + errorMessage);
-        }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    @ExceptionHandler(ApiException.class) public ResponseEntity<Map<String,Object>> domain(ApiException e) {return ResponseEntity.status(e.getStatus()).body(Map.of("error",e.getMessage()));}
+    @ExceptionHandler(MethodArgumentNotValidException.class) public ResponseEntity<Map<String,Object>> validation(MethodArgumentNotValidException e) {
+        Map<String,String> fields=new TreeMap<>();e.getBindingResult().getFieldErrors().forEach(f->fields.put(f.getField(),f.getDefaultMessage()));
+        return ResponseEntity.badRequest().body(Map.of("error","Please check the entered fields","fields",fields));
     }
+    @ExceptionHandler(DataIntegrityViolationException.class) public ResponseEntity<Map<String,Object>> conflict() {return ResponseEntity.status(409).body(Map.of("error","A duplicate account or appointment conflicts with this request"));}
+    @ExceptionHandler({HttpMessageNotReadableException.class,org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class})
+    public ResponseEntity<Map<String,Object>> malformed() {return ResponseEntity.badRequest().body(Map.of("error","Invalid request format"));}
 }

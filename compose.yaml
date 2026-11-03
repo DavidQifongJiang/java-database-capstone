@@ -1,0 +1,44 @@
+name: java-clinic-capstone
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: cms
+      MYSQL_USER: clinic
+      MYSQL_PASSWORD: ${CLINIC_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${CLINIC_ROOT_PASSWORD}
+    volumes:
+      - clinic-mysql:/var/lib/mysql
+      - ./sql/reports.sql:/docker-entrypoint-initdb.d/reports.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", 'MYSQL_PWD=$$MYSQL_ROOT_PASSWORD mysqladmin ping -h localhost -u root --silent']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  mongo:
+    image: mongo:7
+    volumes:
+      - clinic-mongo:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  clinic:
+    build: .
+    ports:
+      - "127.0.0.1:8088:8080"
+    environment:
+      CLINIC_DB_URL: jdbc:mysql://mysql:3306/cms
+      CLINIC_DB_USER: clinic
+      CLINIC_DB_PASSWORD: ${CLINIC_DB_PASSWORD}
+      CLINIC_MONGO_URI: mongodb://mongo:27017/prescriptions
+      CLINIC_JWT_SECRET: ${CLINIC_JWT_SECRET}
+      CLINIC_SEED: "true"
+      CLINIC_DEMO_PASSWORD: ${CLINIC_DEMO_PASSWORD}
+    depends_on:
+      mysql: {condition: service_healthy}
+      mongo: {condition: service_healthy}
+volumes:
+  clinic-mysql:
+  clinic-mongo:

@@ -1,0 +1,11 @@
+mysql> SELECT id,name,email,phone,address FROM patient ORDER BY id;
+
++----+--------------+-----------------------+------------+-----------------------------+
+| id | name         | email                 | phone      | address                     |
++----+--------------+-----------------------+------------+-----------------------------+
+|  1 | Jordan Blake | patient1@example.test | 2025550200 | 100 Example Lane, Demo City |
+|  2 | Casey Ellis  | patient2@example.test | 2025550201 | 101 Example Lane, Demo City |
+|  3 | Riley Quinn  | patient3@example.test | 2025550202 | 102 Example Lane, Demo City |
+|  4 | Alex Parker  | patient4@example.test | 2025550203 | 103 Example Lane, Demo City |
+|  5 | Sam Avery    | patient5@example.test | 2025550204 | 104 Example Lane, Demo City |
++----+--------------+-----------------------+------------+-----------------------------+

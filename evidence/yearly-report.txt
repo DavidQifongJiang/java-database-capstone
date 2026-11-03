@@ -1,0 +1,7 @@
+mysql> CALL GetDoctorWithMostPatientsByYear(2026);
+
++-----------+---------------+
+| doctor_id | patients_seen |
++-----------+---------------+
+|         1 |             3 |
++-----------+---------------+

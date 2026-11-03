@@ -1,0 +1,37 @@
+After POST /patient/login with the fictional patient account (token omitted):
+curl --fail-with-body --silent "http://127.0.0.1:8088/patient/appointments" -H "Authorization: Bearer <login-token>"
+
+{
+  "appointments": [
+    {
+      "id": 1,
+      "doctor": {
+        "id": 1,
+        "name": "Avery Chen",
+        "specialty": "Cardiology",
+        "email": "avery.chen@example.test",
+        "phone": "2025550100",
+        "availableTimes": [
+          "09:00 - 10:00",
+          "10:00 - 11:00",
+          "11:00 - 12:00",
+          "14:00 - 15:00",
+          "15:00 - 16:00"
+        ],
+        "unavailableDates": []
+      },
+      "patient": {
+        "id": 1,
+        "name": "Jordan Blake",
+        "email": "patient1@example.test",
+        "phone": "2025550200",
+        "address": "100 Example Lane, Demo City"
+      },
+      "appointmentTime": "2026-11-04T09:00:00",
+      "status": 0,
+      "appointmentTimeOnly": "09:00:00",
+      "endTime": "2026-11-04T10:00:00",
+      "appointmentDate": "2026-11-04"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+curl --fail-with-body --silent "http://127.0.0.1:8088/doctor"
+
+{
+  "doctors": [
+    {
+      "id": 1,
+      "name": "Avery Chen",
+      "specialty": "Cardiology",
+      "email": "avery.chen@example.test",
+      "phone": "2025550100",
+      "availableTimes": [
+        "09:00 - 10:00",
+        "10:00 - 11:00",
+        "11:00 - 12:00",
+        "14:00 - 15:00",
+        "15:00 - 16:00"
+      ],
+      "unavailableDates": []
+    },
+    {
+      "id": 2,
+      "name": "Morgan Lee",
+      "specialty": "Dermatology",
+      "email": "morgan.lee@example.test",
+      "phone": "2025550101",
+      "availableTimes": [
+        "09:00 - 10:00",
+        "10:00 - 11:00",
+        "11:00 - 12:00",
+        "14:00 - 15:00",
+        "15:00 - 16:00"
+      ],
+      "unavailableDates": []
+    },
+    {
+      "id": 3,
+      "name": "Taylor Rivera",
+      "specialty": "General Medicine",
+      "email": "taylor.rivera@example.test",
+      "phone": "2025550102",
+      "availableTimes": [
+        "09:00 - 10:00",
+        "10:00 - 11:00",
+        "11:00 - 12:00",
+        "14:00 - 15:00",
+        "15:00 - 16:00"
+      ],
+      "unavailableDates": []
+    },
+    {
+      "id": 4,
+      "name": "Jamie Stone",
+      "specialty": "Pediatrics",
+      "email": "jamie.stone@example.test",
+      "phone": "2025550199",
+      "availableTimes": [
+        "09:00 - 10:00",
+        "10:00 - 11:00",
+        "14:00 - 15:00"
+      ],
+      "unavailableDates": []
+    }
+  ]
+}

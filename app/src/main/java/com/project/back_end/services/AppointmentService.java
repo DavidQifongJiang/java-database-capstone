@@ -1,45 +1,50 @@
 package com.project.back_end.services;
+import com.project.back_end.models.*;
+import com.project.back_end.repo.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import java.util.*;
+import java.time.*;
 
+@org.springframework.stereotype.Service
 public class AppointmentService {
-// 1. **Add @Service Annotation**:
-//    - To indicate that this class is a service layer class for handling business logic.
-//    - The `@Service` annotation should be added before the class declaration to mark it as a Spring service component.
-//    - Instruction: Add `@Service` above the class definition.
-
-// 2. **Constructor Injection for Dependencies**:
-//    - The `AppointmentService` class requires several dependencies like `AppointmentRepository`, `Service`, `TokenService`, `PatientRepository`, and `DoctorRepository`.
-//    - These dependencies should be injected through the constructor.
-//    - Instruction: Ensure constructor injection is used for proper dependency management in Spring.
-
-// 3. **Add @Transactional Annotation for Methods that Modify Database**:
-//    - The methods that modify or update the database should be annotated with `@Transactional` to ensure atomicity and consistency of the operations.
-//    - Instruction: Add the `@Transactional` annotation above methods that interact with the database, especially those modifying data.
-
-// 4. **Book Appointment Method**:
-//    - Responsible for saving the new appointment to the database.
-//    - If the save operation fails, it returns `0`; otherwise, it returns `1`.
-//    - Instruction: Ensure that the method handles any exceptions and returns an appropriate result code.
-
-// 5. **Update Appointment Method**:
-//    - This method is used to update an existing appointment based on its ID.
-//    - It validates whether the patient ID matches, checks if the appointment is available for updating, and ensures that the doctor is available at the specified time.
-//    - If the update is successful, it saves the appointment; otherwise, it returns an appropriate error message.
-//    - Instruction: Ensure proper validation and error handling is included for appointment updates.
-
-// 6. **Cancel Appointment Method**:
-//    - This method cancels an appointment by deleting it from the database.
-//    - It ensures the patient who owns the appointment is trying to cancel it and handles possible errors.
-//    - Instruction: Make sure that the method checks for the patient ID match before deleting the appointment.
-
-// 7. **Get Appointments Method**:
-//    - This method retrieves a list of appointments for a specific doctor on a particular day, optionally filtered by the patient's name.
-//    - It uses `@Transactional` to ensure that database operations are consistent and handled in a single transaction.
-//    - Instruction: Ensure the correct use of transaction boundaries, especially when querying the database for appointments.
-
-// 8. **Change Status Method**:
-//    - This method updates the status of an appointment by changing its value in the database.
-//    - It should be annotated with `@Transactional` to ensure the operation is executed in a single transaction.
-//    - Instruction: Add `@Transactional` before this method to ensure atomicity when updating appointment status.
-
-
+    private final AppointmentRepository appointments;private final DoctorRepository doctors;
+    private final PatientRepository patients;private final DoctorService doctorService;
+    public AppointmentService(AppointmentRepository appointments,DoctorRepository doctors,PatientRepository patients,DoctorService doctorService) {
+        this.appointments=appointments;this.doctors=doctors;this.patients=patients;this.doctorService=doctorService;
+    }
+    @Transactional public Appointment bookAppointment(Appointment requested,Long patientId) {
+        Doctor d=doctors.lockById(requested.getDoctor().getId()).orElseThrow(()->new ApiException(HttpStatus.NOT_FOUND,"Doctor not found"));
+        Patient p=patients.findById(patientId).orElseThrow(()->new ApiException(HttpStatus.NOT_FOUND,"Patient not found"));
+        validateSlot(d.getId(),requested.getAppointmentTime());
+        Appointment a=new Appointment();a.setDoctor(d);a.setPatient(p);a.setAppointmentTime(requested.getAppointmentTime());a.setStatus(0);
+        return appointments.saveAndFlush(a);
+    }
+    private void validateSlot(Long doctorId,LocalDateTime time) {
+        if(time==null || !time.isAfter(LocalDateTime.now())) throw new ApiException(HttpStatus.BAD_REQUEST,"Appointment must be in the future");
+        boolean available=doctorService.getDoctorAvailability(doctorId,time.toLocalDate()).stream().anyMatch(s->DoctorService.slotStart(s).equals(time.toLocalTime()));
+        if(!available) throw new ApiException(HttpStatus.CONFLICT,"Appointment slot is unavailable");
+    }
+    @Transactional public Appointment updateAppointment(Long id,Appointment requested,Long patientId) {
+        Appointment a=owned(id,patientId);Long doctorId=requested.getDoctor().getId();
+        Doctor d=doctors.lockById(doctorId).orElseThrow(()->new ApiException(HttpStatus.NOT_FOUND,"Doctor not found"));
+        if(!a.getDoctor().getId().equals(doctorId) || !a.getAppointmentTime().equals(requested.getAppointmentTime())) validateSlot(doctorId,requested.getAppointmentTime());
+        a.setDoctor(d);a.setAppointmentTime(requested.getAppointmentTime());return appointments.saveAndFlush(a);
+    }
+    private Appointment owned(Long id,Long patientId) {
+        Appointment a=appointments.findById(id).orElseThrow(()->new ApiException(HttpStatus.NOT_FOUND,"Appointment not found"));
+        if(!a.getPatient().getId().equals(patientId)) throw new ApiException(HttpStatus.FORBIDDEN,"This appointment belongs to another patient");
+        if(a.getStatus()!=0 || !a.getAppointmentTime().isAfter(LocalDateTime.now())) throw new ApiException(HttpStatus.CONFLICT,"Only upcoming appointments can be changed");
+        return a;
+    }
+    @Transactional public void cancelAppointment(Long id,Long patientId) {appointments.delete(owned(id,patientId));}
+    @Transactional(readOnly=true) public List<Appointment> getAppointments(Long doctorId,LocalDate date,String patientName) {
+        return appointments.findByDoctorIdAndAppointmentTimeGreaterThanEqualAndAppointmentTimeLessThanOrderByAppointmentTime(doctorId,date.atStartOfDay(),date.plusDays(1).atStartOfDay()).stream()
+            .filter(a->a.getPatient().getName().toLowerCase(Locale.ROOT).contains(patientName.toLowerCase(Locale.ROOT))).toList();
+    }
+    @Transactional public Appointment changeStatus(Long id,Long doctorId) {
+        Appointment a=appointments.findById(id).orElseThrow(()->new ApiException(HttpStatus.NOT_FOUND,"Appointment not found"));
+        if(!a.getDoctor().getId().equals(doctorId)) throw new ApiException(HttpStatus.FORBIDDEN,"Appointment is assigned to another doctor");
+        a.setStatus(1);return appointments.save(a);
+    }
 }
